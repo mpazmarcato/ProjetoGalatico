@@ -199,7 +199,7 @@ int main() {
     list<Astronaut> astronauts;
     list<Flight> flights;
 
-    char choice;
+    int choice;
     char confirm;
 
     do {
@@ -211,7 +211,7 @@ int main() {
         cin >> choice;
 
         switch (choice) {
-            case '1': { // Cadastrar Astronauta
+            case 1: { // Cadastrar Astronauta
                 string cpf, nome;
                 int idade;
                 bool cpfRepetido;
@@ -246,7 +246,7 @@ int main() {
                 
                 cout << "Astronauta cadastrado com sucesso!" << endl;
                 break;
-            } case '2': { // Cadastrar Voo
+            } case 2: { // Cadastrar Voo
                 string codigo;
                 do {
                     cout << "Codigo do voo (4 digitos seguidos): ";
@@ -271,7 +271,7 @@ int main() {
                     break; 
                 } while (true);
                 break;
-            }case '3': { // Adicionar Astronauta em Voo
+            }case 3: { // Adicionar Astronauta em Voo
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -308,7 +308,7 @@ int main() {
                         astronauta->addVooParticipado(codigoVoo);
                 }
                 break;
-            } case '4': { // Remover Astronauta de um Voo
+            } case 4: { // Remover Astronauta de um Voo
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -340,7 +340,7 @@ int main() {
                 }
                 break;
             }
-            case '5': { // Lançar um Voo
+            case 5: { // Lançar um Voo
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -362,7 +362,7 @@ int main() {
                 }
                 break;
             }
-            case '6': { // Explodir Voo
+            case 6: { // Explodir Voo
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -380,7 +380,7 @@ int main() {
                 }
                 break;
             }
-            case '7': { // Finalizar um Voo (com sucesso ou falha)
+            case 7: { // Finalizar um Voo (com sucesso ou falha)
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -397,7 +397,7 @@ int main() {
                     cout << "Voo não encontrado." << endl;
                 }
                 break;
-            }case '8': { // Listar todos os voos organizados por status
+            }case 8: { // Listar todos os voos organizados por status
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado." << endl;
                     break;
@@ -478,7 +478,7 @@ int main() {
                 }
 
                 break;
-            } case '9': { // Listar astronautas mortos
+            } case 9: { // Listar astronautas mortos
                 if (astronauts.empty()) {
                     cout << "Nenhum astronauta cadastrado." << endl;
                     break;
@@ -496,7 +496,7 @@ int main() {
                     cout << "Nenhum voo cadastrado." << endl;
                 }
                 break;
-            } case '0': {
+            } case 0: {
                 cout << "Saindo do sistema..." << endl;
                 confirm = 's'; // Define confirm como 's' para sair do loop
                 break;
