@@ -231,14 +231,24 @@ int main() {
                         }
                     }
                 } while (cpf.length() != 11 || !all_of(cpf.begin(), cpf.end(), ::isdigit) || cpfRepetido);
-                cout << "Nome do astronauta: ";
-                cin.ignore();
-                getline(cin, nome);
+
+                do {
+                    cout << "Nome do astronauta: ";
+                    cin.ignore();
+                    getline(cin, nome);
+                    if (nome.empty()) {
+                        cout << "O nome não pode ser vazio. Por favor, insira um nome válido.\n";
+                        continue;
+                    }
+                } while (nome.empty());
+                
                 do { 
                     cout << "Idade do astronauta: ";
                     cin >> idade;
                     if (cin.fail() || idade < 23 || idade > 90) {
                         cout << "Idade inválida. Por favor, insira uma idade entre 23 e 90 anos.\n";
+                        cin.clear(); // Limpa o estado de erro de cin
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Fix: Include template argument and delimiter
                         continue;
                     }
                 } while (idade < 23 || idade > 90);
