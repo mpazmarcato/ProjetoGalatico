@@ -63,7 +63,6 @@ public:
         }
 
         passageiros.push_back(astronauta);
-        //astronauta.setDisponivel(false);
         cout << "Astronauta adicionado ao voo com sucesso!" << endl;
     }
 
@@ -86,22 +85,42 @@ public:
         }
     }
 
-    void launch() {
-        if (status == PLANNED && !passageiros.empty()) {
-            status = IN_PROGRESS;
-            for (auto& astronauta : passageiros) {
-                astronauta.setDisponivel(false);
+    void launchFlight(list<Astronaut> &astronauts) {
+        if (status != PLANNED) {
+            cout << "Voo não pode ser lançado. Verifique se o voo está planejado." << endl;
+            return;
+        }
+
+        if (astronauts.empty()) {
+            cout << "Voo não pode ser lançado. Verifique se há astronautas." << endl;
+            return;
+        }
+
+        bool allAstronautsAvailable = true;
+
+        for (auto& astronaut : astronauts) {
+            if (!astronaut.isDisponivel()) {
+                cout << "Astronauta " << astronaut.getNome() << " não está disponível para a missão." << endl;
+                allAstronautsAvailable = false;
+                break;
             }
+        }
+
+        if (allAstronautsAvailable) {
+            for (auto& astronaut : astronauts) {
+                astronaut.setDisponivel(false);
+            }
+            status = IN_PROGRESS; 
             cout << "Voo lançado com sucesso!" << endl;
         } else {
-            cout << "Voo não pode ser lançado. Verifique se há astronautas e se o voo está planejado." << endl;
+            cout << "Voo não pode ser lançado devido a astronautas indisponíveis." << endl;
         }
     }
 
-    void explode() {
+    void explode(list<Astronaut> &astronauts) {
         if (status == IN_PROGRESS) {
             status = FINISHED_FAILURE;
-            for (auto& astronauta : passageiros) {
+            for (auto& astronauta : astronauts) {
                 astronauta.setVivo(false);
                 astronauta.setDisponivel(false);
                 astronautasMortos.push_back(astronauta);
@@ -112,10 +131,10 @@ public:
         }
     }
 
-    void finish(Status finishStatus) {
+    void finish(Status finishStatus, list<Astronaut> &astronauts) {
         if (status == IN_PROGRESS) {
             status = finishStatus;
-            for (auto& astronauta : passageiros) {
+            for (auto& astronauta : astronauts) {
                 astronauta.setVivo(true);
                 astronauta.setDisponivel(true);
             }
@@ -240,7 +259,11 @@ int main() {
                         cout << "O nome não pode ser vazio. Por favor, insira um nome válido.\n";
                         continue;
                     }
-                } while (nome.empty());
+                    if (all_of(nome.begin(), nome.end(), ::isdigit)) {
+                        cout << "O nome não pode conter números. Por favor, insira um nome válido.\n";
+                        continue;
+                    }
+                } while (nome.empty() || all_of(nome.begin(), nome.end(), ::isdigit));
                 
                 do { 
                     cout << "Idade do astronauta: ";
@@ -281,7 +304,7 @@ int main() {
                     break; 
                 } while (true);
                 break;
-            }case 3: { // Adicionar Astronauta em Voo
+            } case 3: { // Adicionar Astronauta em Voo
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -349,8 +372,7 @@ int main() {
                     voo->removerPassageiro(*astronauta);
                 }
                 break;
-            }
-            case 5: { // Lançar um Voo
+            } case 5: { // Lançar um Voo
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -364,15 +386,14 @@ int main() {
                 if (it != flights.end()) {
                     if (it->getPassageiros().empty()) {
                         cout << "Não é possível lançar o voo sem passageiros." << endl;
-                        break;
+                    } else {
+                        it->launchFlight(astronauts);
                     }
-                    it->launch();
                 } else {
                     cout << "Voo não encontrado." << endl;
                 }
                 break;
-            }
-            case 6: { // Explodir Voo
+            } case 6: { // Explodir Voo
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -384,13 +405,12 @@ int main() {
 
                 auto it = find_if(flights.begin(), flights.end(), [codigoVoo](const Flight& voo) { return voo.getCodigo() == codigoVoo; });
                 if (it != flights.end()) {
-                    it->explode();
+                    it->explode(astronauts);
                 } else {
                     cout << "Voo não encontrado." << endl;
                 }
                 break;
-            }
-            case 7: { // Finalizar um Voo (com sucesso ou falha)
+            } case 7: { // Finalizar um Voo (com sucesso ou falha)
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -402,12 +422,12 @@ int main() {
 
                 auto it = find_if(flights.begin(), flights.end(), [codigoVoo](const Flight& voo) { return voo.getCodigo() == codigoVoo; });
                 if (it != flights.end()) {
-                        it->finish(Flight::FINISHED_SUCCESS);
+                        it->finish(Flight::FINISHED_SUCCESS, astronauts);
                 } else {
                     cout << "Voo não encontrado." << endl;
                 }
                 break;
-            }case 8: { // Listar todos os voos organizados por status
+            } case 8: { // Listar todos os voos organizados por status
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado." << endl;
                     break;
@@ -518,9 +538,8 @@ int main() {
             cout << "Pressione Enter para continuar...";
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.get();
-        } else {
-            break;
         }
+        
     } while (confirm != 's');
 
     return 0;
