@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <limits>
 #include <cstdlib> 
+#include <sstream>
+
 using namespace std;
 
 class Astronaut {
@@ -67,10 +69,10 @@ public:
     }
 
     void removerPassageiro(const Astronaut& astronauta) {
-        if (!astronauta.isDisponivel()) {
-            cout << "Astronauta não está disponível para ser removido como passageiro." << endl;
-            return; 
-        }
+        // if (!astronauta.isDisponivel()) {
+        //     cout << "Astronauta não está disponível para ser removido como passageiro." << endl;
+        //     return; 
+        // }
 
         auto it = find_if(passageiros.begin(), passageiros.end(), [&](const Astronaut& a) {
             return a.getCPF() == astronauta.getCPF();
@@ -134,9 +136,11 @@ public:
     void finish(Status finishStatus, list<Astronaut> &astronauts) {
         if (status == IN_PROGRESS) {
             status = finishStatus;
+            string codigoVoo = getCodigo(); 
             for (auto& astronauta : astronauts) {
                 astronauta.setVivo(true);
                 astronauta.setDisponivel(true);
+                astronauta.addVooParticipado(codigoVoo); 
             }
             cout << "Voo finalizado com sucesso!" << endl;
         } else {
@@ -146,21 +150,23 @@ public:
 
     const list<Astronaut>& getPassageiros() const { return passageiros; }
         
-    void listarAstronautasMortos(const list<Flight> flights) const {
+    void listarAstronautasMortos(list<Flight> flights) const {
         if (!astronautasMortos.empty()) {
             cout << "Astronautas mortos no voo " << codigo << ":\n";
-            for (const auto& astronaut : astronautasMortos) {
+            for (auto& astronaut : astronautasMortos) {
                 cout << "CPF: " << astronaut.getCPF() << endl;
                 string cpf = astronaut.getCPF(); 
                 cout << "Nome: " << astronaut.getNome() << endl;
                 cout << "Voos em que o astronauta participou:\n";
                 bool found = false;
                 for (const auto& flight : flights) {
-                    for (const auto& passenger : flight.getPassageiros()) {
-                        if (passenger.getCPF() == cpf) {
-                            found = true;
-                            cout << "  - Código do voo: " << flight.getCodigo() << endl;
-                            break;
+                    if (flight.getStatus() == Flight::FINISHED_SUCCESS || flight.getStatus() == Flight::FINISHED_FAILURE) {
+                        for (auto& passenger : flight.getPassageiros()) {
+                            if (passenger.getCPF() == cpf) {
+                                found = true;
+                                cout << "  - Código do voo: " << flight.getCodigo() << endl;
+                                break;
+                            }
                         }
                     }
                 }
@@ -172,22 +178,6 @@ public:
     }
 };
 
-void listarVoosParticipados(const string& cpf, const list<Flight>& flights) {
-    cout << "Voos em que o astronauta participou:\n";
-    bool found = false;
-    for (const auto& flight : flights) {
-        for (const auto& passenger : flight.getPassageiros()) {
-            if (passenger.getCPF() == cpf) {
-                found = true;
-                cout << "  - Código do voo: " << flight.getCodigo() << endl;
-                break;
-            }
-        }
-    }
-    if (!found) {
-        cout << "Nenhum voo encontrado para este astronauta." << endl;
-    }
-}
 
 void clearScreen() {
     #ifdef _WIN32
@@ -218,7 +208,7 @@ int main() {
     list<Astronaut> astronauts;
     list<Flight> flights;
 
-    int choice;
+    string input;
     char confirm;
 
     do {
@@ -227,7 +217,15 @@ int main() {
         menu();
 
         cout << "Escolha sua opcao: ";
-        cin >> choice;
+        getline(cin, input); // Read entire line of input
+
+        stringstream ss(input);
+        int choice;
+
+        if (!(ss >> choice) || ss.rdbuf()->in_avail() != 0) { // Check for conversion failure or leftover characters
+            cout << "Opção inválida. Por favor, escolha uma opção válida." << endl;
+            continue;
+        }
 
         switch (choice) {
             case 1: { // Cadastrar Astronauta
@@ -314,32 +312,53 @@ int main() {
                 string codigoVoo;
                 cout << "CPF do astronauta: ";
                 cin >> cpf;
-                cout << "Codigo do voo: ";
+                cout << "Código do voo: ";
                 cin >> codigoVoo;
 
-                auto astronauta = find_if(astronauts.begin(), astronauts.end(), [cpf](const Astronaut& astronauta) {
-                    return astronauta.getCPF() == cpf && astronauta.isVivo() && astronauta.isDisponivel();
+                auto astronauta = find_if(astronauts.begin(), astronauts.end(), [cpf](const Astronaut& a) {
+                    return a.getCPF() == cpf && a.isVivo() && a.isDisponivel();
                 });
 
-                auto voo = find_if(flights.begin(), flights.end(), [codigoVoo](const Flight& voo) {
-                    return voo.getCodigo() == codigoVoo && voo.getStatus() == Flight::PLANNED;
+                auto voo = find_if(flights.begin(), flights.end(), [codigoVoo](const Flight& v) {
+                    return v.getCodigo() == codigoVoo && v.getStatus() == Flight::PLANNED;
                 });
 
                 if (voo == flights.end()) {
                     cout << "Voo não encontrado ou não está planejado." << endl;
-                } else if (astronauta == astronauts.end()) {
-                    if (!astronauta->isDisponivel()) {
-                        cout << "Astronauta não está disponível." << endl;
-                        break;
-                    } else {
-                        cout << "Astronauta não encontrado." << endl;
-                    }
-                } else if (voo->getStatus() != Flight::PLANNED) {
-                    cout << "Não é possível adicionar astronautas a um voo em andamento." << endl;
-                } else {
-                        voo->adicionarPassageiro(*astronauta);
-                        astronauta->addVooParticipado(codigoVoo);
+                    break;
                 }
+
+                if (astronauta == astronauts.end()) {
+                    cout << "Astronauta não encontrado." << endl;
+                    break;
+                }
+
+                if (!astronauta->isDisponivel()) {
+                    cout << "Astronauta não está disponível." << endl;
+                    break;
+                }
+
+                if (voo->getStatus() != Flight::PLANNED) {
+                    cout << "Não é possível adicionar astronautas a um voo em andamento." << endl;
+                    break;
+                }
+
+                // Verificar se o astronauta já está cadastrado nesse voo
+                bool astronautaJaCadastrado = false;
+                for (const auto& passageiro : voo->getPassageiros()) {
+                    if (passageiro.getCPF() == cpf) {
+                        astronautaJaCadastrado = true;
+                        break;
+                    }
+                }
+
+                if (astronautaJaCadastrado) {
+                    cout << "CPF já cadastrado nesse voo. Por favor, insira um CPF diferente." << endl;
+                } else {
+                    voo->adicionarPassageiro(*astronauta);
+                    //astronauta->addVooParticipado(codigoVoo);
+                }
+                
                 break;
             } case 4: { // Remover Astronauta de um Voo
                 if (flights.empty()) {
@@ -364,9 +383,15 @@ int main() {
 
                 if (voo == flights.end()) {
                     cout << "Voo não encontrado ou não está planejado." << endl;
-                } else if (astronauta == astronauts.end()) {
+                    break;
+                } 
+
+                if (astronauta == astronauts.end()) {
                     cout << "Astronauta não encontrado." << endl;
-                } else if (voo->getStatus() != Flight::PLANNED) {
+                    break;
+                } 
+
+                if (voo->getStatus() != Flight::PLANNED) {
                     cout << "Não é possível remover astronautas a um voo em andamento." << endl;
                 } else {
                     voo->removerPassageiro(*astronauta);
@@ -410,7 +435,7 @@ int main() {
                     cout << "Voo não encontrado." << endl;
                 }
                 break;
-            } case 7: { // Finalizar um Voo (com sucesso ou falha)
+            } case 7: { // Finalizar um Voo (com sucesso)
                 if (flights.empty()) {
                     cout << "Nenhum voo cadastrado. Por favor, cadastre um voo primeiro." << endl;
                     break;
@@ -520,7 +545,7 @@ int main() {
 
                 if (!flights.empty()) {
                     for (const auto& flight : flights) {
-                        flight.listarAstronautasMortos(flights);
+                            flight.listarAstronautasMortos(flights);
                     }
                 } else {
                     cout << "Nenhum voo cadastrado." << endl;
@@ -528,10 +553,12 @@ int main() {
                 break;
             } case 0: {
                 cout << "Saindo do sistema..." << endl;
-                confirm = 's'; // Define confirm como 's' para sair do loop
+                confirm = 's'; 
                 break;
-            } default:
-                cout << "Opção inválida. Por favor, escolha uma opção válida." << endl;
+            } //default: {
+            //     cout << "Opção inválida. Por favor, escolha uma opção válida." << endl;
+            //     break;
+            // }
         }
 
         if (confirm != 's') {
