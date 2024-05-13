@@ -1,0 +1,1 @@
+/usr/bin/g++  -Wall -pedantic -g CMakeFiles/ProjetoGalatico.dir/main.cpp.o CMakeFiles/ProjetoGalatico.dir/impl/astronauta.cpp.o CMakeFiles/ProjetoGalatico.dir/impl/flight.cpp.o CMakeFiles/ProjetoGalatico.dir/impl/interface.cpp.o CMakeFiles/ProjetoGalatico.dir/impl/sistema.cpp.o -o ProjetoGalatico 

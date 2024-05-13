@@ -1,0 +1,3 @@
+/home/maria/LP1/ProjetoGalatico/build/CMakeFiles/ProjetoGalatico.dir
+/home/maria/LP1/ProjetoGalatico/build/CMakeFiles/edit_cache.dir
+/home/maria/LP1/ProjetoGalatico/build/CMakeFiles/rebuild_cache.dir
