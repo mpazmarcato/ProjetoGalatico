@@ -1,0 +1,20 @@
+# Arquivos de compilação e execução
+*.o
+*.out
+*.exe
+
+# Arquivos gerados pelo CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Arquivos gerados pelo IDE
+.vscode/
+.idea/
+
+# Arquivos de build
+build/
+bin/
+
+main
+ajustes.txt
