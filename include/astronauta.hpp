@@ -1,37 +1,31 @@
-#ifndef ASTRONAUTA_HPP
-#define ASTRONAUTA_HPP
+#ifndef ASTRONAUT_H
+#define ASTRONAUT_H
 
 #include <string>
 #include <list>
-#include "enum/astronautStateEnum.hpp"
 
 class Astronaut {
 private:
-        std::string cpf;
-        std:: string nome;
-        int idade;
-        bool disponivel;
-        AstronautStatus astronautStatus;
-        std::list<std::string> voosParticipados;
+    std::string cpf;
+    std::string nome;
+    int idade;
+    bool disponivel;
+    bool vivo;
+    std::list<std::string> voosParticipados;
 
-    public:
-        Astronaut();
-        Astronaut(std::string cpf, std::string nome, int idade, bool disponivel, AstronautStatus astronautStatus, std::list<std::string> voosParticipados);
+public:
+    Astronaut(std::string cpf, std::string nome, int idade);
 
-        //Getters
-        std::string getNome();
-        std::string getCPF();
-        int getIdade(); 
-        bool isDisponivel();
-        AstronautStatus getAstronautStatus();
-        std::list<std::string>& getVoosParticipados();
-
-        //Setters
-        void setNome(std::string nome);
-        void setCPF(std::string cpf);
-        void setIdade(int idade);
-        void setAstronautStatus(AstronautStatus astronautStatus);
-        void setDisponivel(bool disponivel);
+    std::string getCPF() const;
+    std::string getNome() const;
+    int getIdade() const;
+    bool isDisponivel() const;
+    bool isVivo() const;
+    bool isDead() const;
+    void setDisponivel(bool disponivel);
+    void setVivo(bool vivo);
+    void addVooParticipado(const std::string& codigoVoo);
+    const std::list<std::string>& getVoosParticipados() const;
 };
 
 #endif

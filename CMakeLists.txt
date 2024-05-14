@@ -25,7 +25,6 @@ add_executable(${APP_NAME}
     impl/astronauta.cpp 
     impl/flight.cpp
     impl/interface.cpp
-    impl/sistema.cpp
 )
 target_include_directories( ${APP_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/lib )
 target_compile_features( ${APP_NAME}  PUBLIC cxx_std_17 )

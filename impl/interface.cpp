@@ -17,3 +17,11 @@ void interface() {
     std::cout << "0. Sair" << std::endl;
     std::cout << "============================================" << std::endl;
 }
+
+void clearScreen() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}

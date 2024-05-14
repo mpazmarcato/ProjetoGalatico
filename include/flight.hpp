@@ -1,27 +1,37 @@
-#ifndef FLIGHT_HPP
-#define FLIGHT_HPP
+#ifndef FLIGHT_H
+#define FLIGHT_H
 
+#include <string>
 #include <list>
-#include "astronauta.hpp"
-#include "enum/flightStateEnum.hpp"
+#include "astronauta.hpp" 
 
 class Flight {
+public:
+    enum Status {
+        PLANNED,
+        IN_PROGRESS,
+        FINISHED_SUCCESS,
+        FINISHED_FAILURE
+    };
+
 private:
     std::string codigo;
-    FlightStatus flightStatus;
-    std::list<std::string> passageiros;
+    std::list<Astronaut> passageiros;
+    Status status;
+    std::list<Astronaut> astronautasMortos;
 
 public:
-    Flight();
-    Flight(std::string codigo, FlightStatus flightStatus, std::list<std::string> passageiros);
+    Flight(std::string codigo);
 
-    std::string getCodigo();
-    FlightStatus getFlightStatus();
-    std::list<std::string>& getPassageiros();
-
-    void setCodigo(std::string codigo);
-    void setFlightStatus(FlightStatus flightStatus);
+    std::string getCodigo() const;
+    Status getStatus() const;
+    void adicionarPassageiro(Astronaut& astronauta);
+    void removerPassageiro(const Astronaut& astronauta);
+    void launchFlight(std::list<Astronaut>& astronauts);
+    void explode(std::list<Astronaut>& astronauts);
+    void finish(Status finishStatus, std::list<Astronaut>& astronauts);
+    const std::list<Astronaut>& getPassageiros() const;
+    void listarAstronautasMortos(std::list<Flight> flights) const;
 };
 
 #endif
-  

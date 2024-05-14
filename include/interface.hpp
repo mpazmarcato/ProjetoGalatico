@@ -3,4 +3,6 @@
 
 void interface();
 
+void clearScreen();
+
 #endif
