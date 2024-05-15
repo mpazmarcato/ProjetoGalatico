@@ -1,5 +1,5 @@
-#include "astronauta.hpp"
-#include "flight.hpp"
+#include "../include/astronauta.hpp"
+#include "../include/flight.hpp"
 #include <iostream>
 #include <algorithm>
 
@@ -14,32 +14,19 @@ Flight::Status Flight::getStatus() const {
 }
 
 void Flight::adicionarPassageiro(Astronaut& astronauta) {
-    if (!astronauta.isDisponivel()) {
-        std::cout << "Astronauta não está disponível para ser adicionado como passageiro." << std::endl;
-        return;
-    }
-
-    if (astronauta.isDead()) {
-        std::cout << "Astronauta está marcado como morto e não pode ser adicionado como passageiro." << std::endl;
-        return;
-    }
-
     passageiros.push_back(astronauta);
     std::cout << "Astronauta adicionado ao voo com sucesso!" << std::endl;
 }
 
-void Flight::removerPassageiro(const Astronaut& astronauta) {
+void Flight::removerPassageiro(Astronaut& astronauta) {
     auto it = std::find_if(passageiros.begin(), passageiros.end(), [&](const Astronaut& a) {
         return a.getCPF() == astronauta.getCPF();
     });
 
     if (it != passageiros.end()) {
-        it->setDisponivel(true);
         passageiros.erase(it);
         std::cout << "Astronauta removido do voo com sucesso!" << std::endl;
-    } else {
-        std::cout << "Astronauta não encontrado neste voo." << std::endl;
-    }
+    } 
 }
 
 void Flight::launchFlight(std::list<Astronaut>& astronauts) {
@@ -77,9 +64,11 @@ void Flight::launchFlight(std::list<Astronaut>& astronauts) {
 void Flight::explode(std::list<Astronaut>& astronauts) {
     if (status == IN_PROGRESS) {
         status = FINISHED_FAILURE;
+        std::string codigoVoo = getCodigo();
         for (auto& astronauta : astronauts) {
             astronauta.setVivo(false);
             astronauta.setDisponivel(false);
+            astronauta.addVooParticipado(codigoVoo);
             astronautasMortos.push_back(astronauta);
         }
         std::cout << "Voo explodido com sucesso!" << std::endl;
@@ -107,23 +96,15 @@ const std::list<Astronaut>& Flight::getPassageiros() const {
     return passageiros;
 }
 
-void Flight::listarAstronautasMortos(std::list<Flight> flights) const {
-  if (!astronautasMortos.empty()) {
-    for (auto& astronaut : astronautasMortos) {
-      std::cout << "CPF: " << astronaut.getCPF() << std::endl;
-      std::string cpf = astronaut.getCPF();
-      std::cout << "Nome: " << astronaut.getNome() << std::endl;
-      std::cout << "Voos em que o astronauta participou:\n";
-      for (const auto& flight : flights) {
-        if (flight.getStatus() == Flight::FINISHED_FAILURE) {
-          for (auto& passenger : flight.getPassageiros()) {
-            if (passenger.getCPF() == cpf) {
-                std::cout << "  - Código do voo: " << flight.getCodigo() << std::endl;
-                break;
+void Flight::listarAstronautasMortos(std::list<Astronaut> astronauts) {
+    for(auto& astronauta : astronauts){
+        if (astronauta.isDead()){
+            std::cout << "CPF: " << astronauta.getCPF() << std::endl;
+            std::cout << "Nome: " << astronauta.getNome() << std::endl;
+            std::cout << "Voos em que o astronauta participou: \n";
+            for (auto& codigo : astronauta.getVoosParticipados()){
+                std::cout << "  - Código do voo: " << codigo << std::endl;
             }
-          }
         }
-      }
     }
-  }
-} 
+}

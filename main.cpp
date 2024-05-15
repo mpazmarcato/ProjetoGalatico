@@ -78,7 +78,9 @@ int main() {
                         continue;
                     }
                 } while (idade < 23 || idade > 90);
-                astronauts.push_back(Astronaut(cpf, nome, idade));
+
+                Astronaut novoAstronauta(cpf, nome, idade);
+                astronauts.push_back(novoAstronauta);
                 
                 cout << "Astronauta cadastrado com sucesso!" << endl;
                 break;
@@ -102,7 +104,9 @@ int main() {
                         continue;
                     }
 
-                    flights.push_back(Flight(codigo));
+                    Flight novoVoo(codigo);
+                    flights.push_back(novoVoo);
+                    
                     cout << "Voo cadastrado com sucesso!" << endl;
                     break; 
                 } while (true);
@@ -138,8 +142,8 @@ int main() {
                     break;
                 }
 
-                if (!astronauta->isDisponivel()) {
-                    cout << "Astronauta não está disponível." << endl;
+                if (!astronauta->isDisponivel() ) {
+                    cout << "Astronauta morto ou não disponível para ser adicionado como passageiro." << endl;
                     break;
                 }
 
@@ -147,6 +151,7 @@ int main() {
                     cout << "Não é possível adicionar astronautas a um voo em andamento." << endl;
                     break;
                 }
+
 
                 // Verificar se o astronauta já está cadastrado nesse voo
                 bool astronautaJaCadastrado = false;
@@ -161,7 +166,6 @@ int main() {
                     cout << "CPF já cadastrado nesse voo. Por favor, insira um CPF diferente." << endl;
                 } else {
                     voo->adicionarPassageiro(*astronauta);
-                    //astronauta->addVooParticipado(codigoVoo);
                 }
                 
                 break;
@@ -348,12 +352,16 @@ int main() {
                 cout << "          Lista de Astronautas" << endl;
                 cout << "============================================" << endl;
 
-                if (!flights.empty()) {
-                    for (const auto& flight : flights) {
-                            flight.listarAstronautasMortos(flights);
+                //listarAstronautasMortos(astronauts);
+                for(auto& astronauta : astronauts){
+                    if (astronauta.isDead()){
+                        std::cout << "CPF: " << astronauta.getCPF() << std::endl;
+                        std::cout << "Nome: " << astronauta.getNome() << std::endl;
+                        std::cout << "Voos em que o astronauta participou: \n";
+                        for (auto& codigo : astronauta.getVoosParticipados()){
+                            std::cout << "  - Código do voo: " << codigo << std::endl;
+                        }
                     }
-                } else {
-                    cout << "Nenhum voo cadastrado." << endl;
                 }
                 break;
             } case 0: {

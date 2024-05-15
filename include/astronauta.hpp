@@ -1,5 +1,5 @@
-#ifndef ASTRONAUT_H
-#define ASTRONAUT_H
+#ifndef ASTRONAUT_HPP
+#define ASTRONAUT_HPP
 
 #include <string>
 #include <list>
