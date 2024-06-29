@@ -21,7 +21,7 @@ public:
     int getIdade() const;
     bool isDisponivel() const;
     bool isVivo() const;
-    bool isDead() const;
+    
     void setDisponivel(bool disponivel);
     void setVivo(bool vivo);
     void addVooParticipado(const std::string& codigoVoo);

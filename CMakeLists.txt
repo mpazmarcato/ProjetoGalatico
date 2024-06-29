@@ -23,6 +23,7 @@ include_directories(include)
 add_executable(${APP_NAME} 
     main.cpp
     impl/astronauta.cpp 
+    impl/controller.cpp
     impl/flight.cpp
     impl/interface.cpp
 )

@@ -18,21 +18,17 @@ private:
     std::string codigo;
     std::list<Astronaut> passageiros;
     Status status;
-    std::list<Astronaut> astronautasMortos;
 
 public:
     Flight(std::string codigo);
-
     std::string getCodigo() const;
     Status getStatus() const;
-    void adicionarPassageiro(Astronaut& astronauta);
-    void removerPassageiro(Astronaut& astronauta);
-    void launchFlight(std::list<Astronaut>& astronauts);
-    void explode(std::list<Astronaut>& astronauts);
-    void finish(Status finishStatus, std::list<Astronaut>& astronauts);
     const std::list<Astronaut>& getPassageiros() const;
-    //void listarAstronautasMortos(std::list<Flight> flights) const;
-    void listarAstronautasMortos(const std::list<Astronaut> astronauts);
+
+    void setStatus(Status newStatus);
+    void addAstronaut(const Astronaut& astronaut);
+    void removeAstronaut(const std::string& astronautName);
+    void listPassengers() const;
 };
 
 #endif

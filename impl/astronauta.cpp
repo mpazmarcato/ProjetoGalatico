@@ -23,10 +23,6 @@ bool Astronaut::isVivo() const {
     return vivo;
 }
 
-bool Astronaut::isDead() const {
-    return !vivo;
-}
-
 void Astronaut::setDisponivel(bool disponivel) {
     this->disponivel = disponivel;
 }
