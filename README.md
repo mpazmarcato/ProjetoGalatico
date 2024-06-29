@@ -26,6 +26,6 @@ O Projeto Galáctico visa criar uma plataforma abrangente para o gerenciamento d
   ```
   cd build
   make
-  ./project
+  ./ProjetoGalatico
   ```
 
