@@ -15,6 +15,16 @@ O Projeto Galáctico visa criar uma plataforma abrangente para o gerenciamento d
 - **Listar todos os voos**
 - **Listar todos os astronautas mortos**
   
-## Contribuição
-
-Se você gostaria de contribuir para o Projeto Galáctico, sinta-se à vontade para abrir problemas, enviar solicitações de pull ou contribuir com código para melhorar o sistema.
+## Como rodar o projeto
+- Na pasta principal do projeto rode o comando:
+  ```
+  cmake -B build
+  cmake --build build
+  ```
+  - Será criado um diretório chamado `build`.
+- No diretório `build`, execute o comando `make` e, após isso, execute o programa:
+  ```
+  cd build
+  make
+  ./ProjetoGalatico
+  ```
