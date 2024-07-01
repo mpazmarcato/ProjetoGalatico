@@ -28,7 +28,3 @@ O Projeto Galáctico visa criar uma plataforma abrangente para o gerenciamento d
   make
   ./ProjetoGalatico
   ```
-<<<<<<< HEAD
-=======
-
->>>>>>> 576373b468832d7a3e2210e7da94b6431827ac10
