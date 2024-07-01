@@ -100,16 +100,16 @@ void adicionarAstronautaEmVoo(list<Astronaut>& astronauts, list<Flight>& flights
     cin >> cpf;
 
     auto astronauta = find_if(astronauts.begin(), astronauts.end(), [cpf](const Astronaut& a) {
-        return a.getCPF() == cpf && a.isVivo() && a.isDisponivel();
+        return a.getCPF() == cpf;
     });
-
-    if (!astronauta->isDisponivel()) {
-        cout << "Astronauta não disponível para ser adicionado como passageiro." << endl;
-        return;
-    }
 
     if (astronauta == astronauts.end()) {
         cout << "Astronauta não encontrado." << endl;
+        return;
+    }
+
+    if (!astronauta->isVivo() || !astronauta->isDisponivel()) {
+        cout << "Astronauta não disponível para ser adicionado como passageiro." << endl;
         return;
     }
 
