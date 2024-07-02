@@ -24,5 +24,5 @@ O Projeto Galáctico visa criar uma plataforma abrangente para o gerenciamento d
   - Será criado um diretório chamado `build`.
 
   ```
- ./build/ProjetoGalatico
+  ./build/ProjetoGalatico
   ```
