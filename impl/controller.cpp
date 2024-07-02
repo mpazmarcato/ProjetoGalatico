@@ -166,10 +166,10 @@ void removerAstronautaDeVoo(list<Astronaut>& astronauts, list<Flight>& flights) 
     if (voo == flights.end()) {
         cout << "Voo não encontrado ou não está planejado." << endl;
         return;
+    } else {
+        voo->removeAstronaut(cpf);
+        cout << "Astronauta removido com sucesso!" << endl;
     }
-
-    voo->removeAstronaut(cpf);
-    cout << "Astronauta removido com sucesso!" << endl;
 }
 
 void lancarVoo(std::list<Astronaut>& astronauts, std::list<Flight>& flights) {
@@ -398,6 +398,11 @@ void listarVoos(const list<Flight>& flights) {
 }
 
 void listarAstronautasMortos(const list<Astronaut>& astronauts) {
+    if (astronauts.empty()) {
+        cout << "Nenhum astronauta cadastrado. Por favor, cadastre um astronauta primeiro." << endl;
+        return;
+    }
+
     for (Astronaut astronauta : astronauts) {
         if (!astronauta.isVivo()) {
             cout << "CPF: " << astronauta.getCPF() << endl;

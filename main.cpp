@@ -14,10 +14,16 @@ int main() {
     int option;
     
     do {
-        //clearScreen();
+        clearScreen();
         interface();
         cout << "Escolha uma opção: ";
         cin >> option;
+
+        if(cin.fail()) {
+            cin.clear(); // limpa o estado de erro
+            //cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignora a entrada inválida
+            option = -1; // atribui um valor inválido para cair no default
+        }
 
         switch (option) {
             case 1:
@@ -57,7 +63,7 @@ int main() {
 
         if (option != 0) {
             cout << "Pressione Enter para continuar...";
-             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.get();
         }
 
