@@ -15,7 +15,7 @@ O Projeto Galáctico visa criar uma plataforma abrangente para o gerenciamento d
 - **Listar todos os voos**
 - **Listar todos os astronautas mortos**
   
-## Como rodar o projeto
+## Como rodar o projeto (Linux)
 - Na pasta principal do projeto utilize o comando:
   ```
   cmake -S . -B build
