@@ -27,6 +27,8 @@ cmake -S . -B build
 cmake --build build
 ```
 Obs: Será criado um diretório chamado `build`.
+Logo, digite
 ```
 ./build/ProjetoGalatico
 ```
+e programa será executado.
