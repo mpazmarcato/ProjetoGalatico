@@ -16,13 +16,17 @@ O Projeto Galáctico visa criar uma plataforma abrangente para o gerenciamento d
 - **Listar todos os astronautas mortos**
   
 ## Como rodar o projeto (Linux)
-- Na pasta principal do projeto utilize o comando:
-  ```
-  cmake -S . -B build
-  cmake --build build
-  ```
-  - Será criado um diretório chamado `build`.
+Para executar o Projeto Galáctico, é necessário clonar o projeto com o comando abaixo:
+```
+git clone https://github.com/mpazmarcato/ProjetoGalatico.git
+```
 
-  ```
-  ./build/ProjetoGalatico
-  ```
+Na pasta principal do projeto utilize o comando:
+```
+cmake -S . -B build
+cmake --build build
+```
+Obs: Será criado um diretório chamado `build`.
+```
+./build/ProjetoGalatico
+```
