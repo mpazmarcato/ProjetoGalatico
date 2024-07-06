@@ -64,22 +64,18 @@ void cadastrarAstronauta(list<Astronaut>& astronauts) {
 void cadastrarVoo(list<Flight>& flights) {
     string codigo;
     do {
-        cout << "Codigo do voo (4 digitos seguidos): ";
+        cout << "Codigo do voo (1 letra maiúscula seguida de 3 dígitos, por exemplo, V001): ";
         cin >> codigo;
 
         auto it = find_if(flights.begin(), flights.end(), [&codigo](const Flight& voo) {
             return voo.getCodigo() == codigo;
         });
 
-        if (codigo.length() != 4 || it != flights.end()) {
-            cout << "Código do voo inválido ou já existente. Deve conter exatamente 4 dígitos e ser único." << endl;
+        if (codigo.length() != 4 || !isupper(codigo[0]) || !isdigit(codigo[1]) || !isdigit(codigo[2]) || !isdigit(codigo[3]) || it != flights.end()) {
+            cout << "Código do voo inválido ou já existente. Deve conter exatamente 1 letra maiúscula seguida de 3 dígitos e ser único." << endl;
             continue; 
         }
 
-        if (codigo.find('e') != string::npos) {
-            cout << "Código do voo inválido. Não pode conter o número 'e'." << endl;
-            continue;
-        }
 
         Flight novoVoo(codigo);
         flights.push_back(novoVoo);
@@ -108,7 +104,7 @@ void adicionarAstronautaEmVoo(list<Astronaut>& astronauts, list<Flight>& flights
         return;
     }
 
-    if (!astronauta->isVivo() || !astronauta->isDisponivel()) {
+    if (!astronauta->isVivo()) {
         cout << "Astronauta não disponível para ser adicionado como passageiro." << endl;
         return;
     }
@@ -121,7 +117,12 @@ void adicionarAstronautaEmVoo(list<Astronaut>& astronauts, list<Flight>& flights
     });
 
     if (voo == flights.end()) {
-        cout << "Voo não encontrado ou não está planejado." << endl;
+        cout << "Voo não encontrado." << endl;
+        return;
+    } 
+
+    if (voo->getStatus() != Flight::PLANNED) {
+        std::cout << "Voo não pode ser lançado. Verifique se o voo está planejado." << std::endl;
         return;
     }
 
@@ -132,7 +133,7 @@ void adicionarAstronautaEmVoo(list<Astronaut>& astronauts, list<Flight>& flights
         cout << "CPF já cadastrado nesse voo. Por favor, insira um CPF diferente." << endl;
     } else { 
         voo->addAstronaut(*astronauta);
-        cout << "Astronaut adicionado com sucesso!" << endl;
+        cout << "Astronauta adicionado com sucesso!" << endl;
     }
     
 }
@@ -164,11 +165,13 @@ void removerAstronautaDeVoo(list<Astronaut>& astronauts, list<Flight>& flights) 
     });
 
     if (voo == flights.end()) {
-        cout << "Voo não encontrado ou não está planejado." << endl;
+        cout << "Voo não encontrado." << endl;
+        return;
+    } else if (voo->getStatus() != Flight::PLANNED) {
+        cout << "Voo não pode ser lançado. Verifique se o voo está planejado." << endl;
         return;
     } else {
         voo->removeAstronaut(cpf);
-        cout << "Astronauta removido com sucesso!" << endl;
     }
 }
 
@@ -370,7 +373,7 @@ void listarVoos(const list<Flight>& flights) {
         }
     }
     if (!hasInProgressFlights) {
-        cout << "Nenhum voo em progresso." << endl;
+        cout << "  Nenhum voo em progresso." << endl;
     }
 
     cout << "Voos Finalizados:" << endl;
@@ -382,7 +385,7 @@ void listarVoos(const list<Flight>& flights) {
             cout << "  Passageiros: ";
             const auto& passageiros = flight.getPassageiros();
             if (passageiros.empty()) {
-                cout << "Nenhum passageiro registrado." << endl;
+                cout << "  Nenhum passageiro registrado." << endl;
             } else {
                 for (const auto& astronauta : passageiros) {
                     cout << astronauta.getNome() << " (CPF: " << astronauta.getCPF() << "), ";
@@ -393,7 +396,7 @@ void listarVoos(const list<Flight>& flights) {
         }
     }
     if (!hasFinishedFlights) {
-        cout << "Nenhum voo finalizado." << endl;
+        cout << "  Nenhum voo finalizado." << endl;
     }
 }
 

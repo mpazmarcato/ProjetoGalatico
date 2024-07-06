@@ -36,6 +36,7 @@ void Flight::removeAstronaut(const std::string& cpf) {
 
     if (it != passageiros.end()) {
         passageiros.erase(it);
+        std::cout << "Astronauta removido com sucesso!" << std::endl;
     } else {
         std::cout << "Astronauta não encontrado neste voo." << std::endl;
     }
@@ -47,7 +48,5 @@ void Flight::listPassengers() const {
         std::cout << "- " << astronaut.getNome() << std::endl;
     }
 }
-
-
 
 
