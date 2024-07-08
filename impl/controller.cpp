@@ -122,7 +122,7 @@ void adicionarAstronautaEmVoo(list<Astronaut>& astronauts, list<Flight>& flights
     } 
 
     if (voo->getStatus() != Flight::PLANNED) {
-        std::cout << "Voo não pode ser lançado. Verifique se o voo está planejado." << std::endl;
+        std::cout << "O voo não está planejado para adicionar o astronauta nele." << std::endl;
         return;
     }
 
@@ -168,7 +168,7 @@ void removerAstronautaDeVoo(list<Astronaut>& astronauts, list<Flight>& flights) 
         cout << "Voo não encontrado." << endl;
         return;
     } else if (voo->getStatus() != Flight::PLANNED) {
-        cout << "Voo não pode ser lançado. Verifique se o voo está planejado." << endl;
+        cout << "O voo não está planejado para remover o astronauta dele." << endl;
         return;
     } else {
         voo->removeAstronaut(cpf);
